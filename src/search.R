@@ -1,8 +1,5 @@
-# 涨停搜索
-search_up_limit <- function(df, intvl = NULL, start_date = NULL, end_date = NULL) {
-  start_date <- gsub("-", "", start_date)
-  end_date <- gsub("-", "", end_date)
-
+# 搜索策略：涨停
+search_up_limit <- function(df, intvl = NULL) {
   df <- filter(df, !is.na(up_limit))
 
   if (!nrow(df)) {
@@ -19,33 +16,17 @@ search_up_limit <- function(df, intvl = NULL, start_date = NULL, end_date = NULL
     mutate(diff_days = lead(index) - index) %>%
     select(-index)
 
-  # Apply the interval filter if provided
   if (!is.null(intvl)) {
-    res <- res %>%
-      filter(diff_days >= intvl)
-  }
-
-  # Apply the start_date filter if provided
-  if (!is.null(start_date)) {
-    res <- res %>%
-      filter(trade_date >= start_date)
-  }
-
-  # Apply the end_date filter if provided
-  if (!is.null(end_date)) {
-    res <- res %>%
-      filter(trade_date <= end_date)
+    res <- filter(res, diff_days >= intvl)
   }
 
   return(res)
 }
 
 
-# 收复均线(制定数量或指定均线)
-search_recover_ma <- function(df, nums = NULL, lines = NULL, start_date = NULL, end_date = NULL) {
+# 搜索策略：收复均线(收复数量或指定均线)
+search_recover_ma <- function(df, nums = NULL, lines = NULL) {
   if(is.null(nums) & is.null(lines)) return(NULL)
-  start_date <- gsub("-", "", start_date)
-  end_date <- gsub("-", "", end_date)
   
   pvt <- df %>%
     pivot_longer(
@@ -86,21 +67,27 @@ search_recover_ma <- function(df, nums = NULL, lines = NULL, start_date = NULL, 
   
   res <- filter(df, trade_date %in% fd)
   
-  if (!is.null(start_date)) {
-    res <- res %>%
-      filter(trade_date >= start_date)
-  }
-  
-  if (!is.null(end_date)) {
-    res <- res %>%
-      filter(trade_date <= end_date)
-  }
+  return(res)
+}
+
+
+# 搜索策略：放量倍增
+search_vol_times <- function(df, rct_days, times){
+  res <- 
+    df %>% 
+    mutate(
+      ma_vol = rollapply(vol, width = rct_days, FUN = mean, align = "left", fill = NA),
+      ma_vol = lead(ma_vol),
+      vol_times = vol / ma_vol
+    ) %>% 
+    filter(vol_times >= times) 
   
   return(res)
 }
 
 
 
+# 检索交易日区间
 search_trade_period <- function(trdate, daily, bfr_days = 0, aft_days = 0) {
   daily$idx <- 1:nrow(daily)
   idx <- daily[daily$trade_date == trdate, "idx"]
