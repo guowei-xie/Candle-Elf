@@ -65,6 +65,14 @@ search_server <- function(input, output, session) {
         filter(trade_date %in% tmp$trade_date)
     }
     
+    if ("close_pct_chg" %in% search_func) {
+      tmp <- search_close_pct_chg_range(
+        df = tmp,
+        upper = input$close_pct_chg_upper,
+        lower = input$close_pct_chg_lower
+      )
+    }
+    
     res <- 
       tmp$trade_date %>% 
       head(30) %>% 

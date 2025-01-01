@@ -85,6 +85,18 @@ search_vol_times <- function(df, rct_days, times){
   return(res)
 }
 
+# 搜索策略：收盘涨幅区间
+search_close_pct_chg_range <- function(df, upper = NULL, lower = NULL){
+  if(!is.null(upper)) {
+    df <- filter(df, pct_chg <= upper)
+  }
+  
+  if(!is.null(lower)){
+    df <- filter(df, pct_chg >= lower)
+  }
+  
+  return(df)
+}
 
 
 # 检索交易日区间

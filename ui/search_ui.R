@@ -41,9 +41,10 @@ search_ui <- function(id){
         choices = list(
           "涨停首板" = "fst_limt_up",
           "收复均线" = "recover_ma",
-          "放量倍增" = "vol_times"
+          "放量倍增" = "vol_times",
+          "收盘涨幅" = "close_pct_chg"
         ),
-        selected = "fst_limt_up",
+        selected = NULL,
         multiple = TRUE
       ),
       
@@ -63,13 +64,13 @@ search_ui <- function(id){
         condition = sprintf("input['%s'].includes('recover_ma')", ns("search_func")),
         numericInput(
           inputId = ns("recover_ma_nums"),
-          label = tags$small("收复均线条件：收复均线数量（可选）"),
+          label = tags$small("收复均线条件：收复均线数量(可选)"),
           value = 1,
           min = 0
         ),
         selectInput(
           inputId = ns("recover_ma_days"),
-          label = tags$small("收复均线条件：收复均线名称（可选）"),
+          label = tags$small("收复均线条件：收复均线名称(可选)"),
           choices = list(
             "5日均线" = "ma_5",
             "10日均线" = "ma_10",
@@ -100,6 +101,24 @@ search_ui <- function(id){
         )
       ),
       
+      # 涨跌幅选项
+      conditionalPanel(
+        condition = sprintf("input['%s'].includes('close_pct_chg')", ns("search_func")),
+        numericInput(
+          inputId = ns("close_pct_chg_upper"),
+          label = tags$small("收盘涨幅条件：区间上限(%)"),
+          value = NULL,
+          min = -30,
+          max = 30
+        ),
+        numericInput(
+          inputId = ns("close_pct_chg_lower"),
+          label = tags$small("收盘涨幅条件：区间下限(%)"),
+          value = NULL,
+          min = -30,
+          max = 30,
+        )
+      ),
       
       fluidRow(
         column(
