@@ -6,21 +6,9 @@ search_ui <- function(id){
       width = 3,
       selectInput(
         inputId = ns("stock"),
-        label = "目标个股",
+        label = "搜索个股",
         choices = basic_dat$stock_name,
         selected = NULL
-      ),
-      numericInput(
-        inputId = ns("period_start"),
-        label = "附带前N日行情",
-        value = 30,
-        min = 0
-      ),
-      numericInput(
-        inputId = ns("period_end"),
-        label = "附带后N日行情",
-        value = 30,
-        min = 0
       ),
       dateInput(
         inputId = ns("start_date"),
@@ -30,6 +18,19 @@ search_ui <- function(id){
       dateInput(
         inputId = ns("end_date"),
         label = "搜索范围（结束）:"
+      ),
+      
+      numericInput(
+        inputId = ns("period_start"),
+        label = "向前显示N日",
+        value = 30,
+        min = 0
+      ),
+      numericInput(
+        inputId = ns("period_end"),
+        label = "向后显示N日",
+        value = 30,
+        min = 0
       ),
       
       hr(),
@@ -48,7 +49,6 @@ search_ui <- function(id){
       
       # 涨停首板条件
       conditionalPanel(
-        # condition = "input['search_func'].indexOf('fst_limt_up') != -1",
         condition = sprintf("input['%s'].includes('fst_limt_up')", ns("search_func")),
         numericInput(
           inputId = ns("fst_limt_up_interval"),
@@ -60,7 +60,6 @@ search_ui <- function(id){
       
       # 收复均线条件
       conditionalPanel(
-        # condition = "input['search_func'].indexOf('recover_ma') != -1",
         condition = sprintf("input['%s'].includes('recover_ma')", ns("search_func")),
         numericInput(
           inputId = ns("recover_ma_nums"),
@@ -85,7 +84,6 @@ search_ui <- function(id){
       
       # 放量倍增选项
       conditionalPanel(
-        # condition = "input['search_func'].indexOf('vol_times') != -1",
         condition = sprintf("input['%s'].includes('vol_times')", ns("search_func")),
         numericInput(
           inputId = ns("vol_times_rct_days"),
@@ -98,7 +96,7 @@ search_ui <- function(id){
           inputId = ns("vol_times_times"),
           label = tags$small("放量倍增条件：放量倍数"),
           value = 1.5,
-          min = 0.1
+          min = 0
         )
       ),
       
