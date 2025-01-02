@@ -31,7 +31,7 @@ ui <- fluidPage(
   theme = shinytheme("cosmo"),
   
   navbarPage(
-    title = "Candle Elf",
+    title = cnf$title,
     
     tabPanel("搜索 >>", search_ui("search"))
     # tabPanel("回测 >>", backtest_ui("backtest")),

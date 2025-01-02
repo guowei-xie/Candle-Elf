@@ -1,0 +1,9 @@
+default:
+  seed: 123
+
+duckDB:
+  path: ./
+  name: stock.duckdb
+
+tushare:
+  token: your tushare token
