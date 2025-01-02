@@ -5,3 +5,6 @@
 .DS_Store
 .Rhistory
 test.R
+config.yml
+*.duckdb
+*.duckdb.wal
