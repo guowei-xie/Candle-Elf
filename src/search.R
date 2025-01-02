@@ -85,6 +85,7 @@ search_vol_times <- function(df, rct_days, times){
   return(res)
 }
 
+
 # 搜索策略：收盘涨幅区间
 search_close_pct_chg_range <- function(df, upper = NULL, lower = NULL){
   if(!is.null(upper)) {

@@ -1,6 +1,0 @@
-default:
-  seed: 123
-
-duckDB:
-  path: /Users/xgw/workspace/R/github/stock_data
-  name: stock.duckdb

@@ -8,3 +8,4 @@ test.R
 config.yml
 *.duckdb
 *.duckdb.wal
+database/
