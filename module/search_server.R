@@ -12,13 +12,8 @@ search_server <- function(input, output, session) {
     df <- daily %>%
       left_join(limit, by = c("ts_code", "trade_date")) %>%
       left_join(basic, by = "ts_code") %>% 
-      mutate(
-        ma_5 = rollapply(close, width = 5, FUN = mean, align = "left", fill = NA),
-        ma_10 = rollapply(close, width = 10, FUN = mean, align = "left", fill = NA),
-        ma_20 = rollapply(close, width = 20, FUN = mean, align = "left", fill = NA),
-        ma_30 = rollapply(close, width = 30, FUN = mean, align = "left", fill = NA),
-        ma_60 = rollapply(close, width = 60, FUN = mean, align = "left", fill = NA)
-      )
+      add_ma_price() %>% 
+      add_boll_bands_price()
     
     if(!is.null(input$start_date)) {
       start_date <- gsub("-", "", input$start_date)
@@ -95,8 +90,10 @@ search_server <- function(input, output, session) {
     res <- map2(df, names(df), ~{
       .x %>% 
         candlestick_chart(args = list(ma_lines = input$display_lines)) %>% 
+        add_boll_bands() %>% 
         add_triangle(tr_date = .y) %>% 
         add_vol()
+        
     })
     
     hidePageSpinner()

@@ -100,6 +100,22 @@ search_close_pct_chg_range <- function(df, upper = NULL, lower = NULL){
 }
 
 
+# 搜索策略：突破布林带上轨
+search_through_bband_upper <- function(df){
+  df %>%
+    mutate(trade_date = as.Date(trade_date, format = "%Y%m%d")) %>% 
+    arrange(trade_date) %>%
+    mutate(
+      # 计算布林带
+      BB = BBands(HLC = close, n = 20, maType = "SMA", sd = 2),
+      Middle_Band = BB$dn,   # 中轨线
+      Upper_Band = BB$up,    # 上轨线
+      Lower_Band = BB$dn     # 下轨线
+    ) %>% glimpse()
+}
+
+
+
 # 检索交易日区间
 search_trade_period <- function(trdate, daily, bfr_days = 0, aft_days = 0) {
   daily$idx <- 1:nrow(daily)

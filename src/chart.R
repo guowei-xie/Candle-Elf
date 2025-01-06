@@ -152,4 +152,25 @@ add_triangle <- function(kplt, tr_date, col = "salmon"){
 }
 
 
+# Add Bollinger Bands to the candlestick chart.
+add_boll_bands <- function(kplt){
+  boll_df <- kplt$data %>% 
+    pivot_longer(
+      cols = ends_with("_band"),
+      names_to = "band_line",
+      values_to = "band_price"
+    ) %>% 
+    select(trade_date, band_line, band_price)
+  
+  kplt +
+    geom_line(
+      data = boll_df,
+      aes(y = band_price, group = band_line),
+      col = "black",
+      lty = 4
+    )
+}
+
+
+
 
