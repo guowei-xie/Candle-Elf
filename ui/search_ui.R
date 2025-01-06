@@ -141,6 +141,32 @@ search_ui <- function(id){
           )
         )
       ),
+      
+      br(),
+      hr(),
+      tags$small("自定义选项"),
+      
+      selectInput(
+        inputId = ns("market"),
+        label = tags$small("随机范围"),
+        choices = c("主板", "创业板", "北交所", "科创板"),
+        selected = NULL,
+        multiple = TRUE
+      ),
+      
+      selectInput(
+        inputId = ns("display_lines"),
+        label = tags$small("显示均线"),
+        choices = list(
+          "5日均线" = "ma_5",
+          "10日均线" = "ma_10",
+          "20日均线" = "ma_20",
+          "30日均线" = "ma_30",
+          "60日均线" = "ma_60"
+        ),
+        selected = c("ma_5", "ma_10", "ma_20"),
+        multiple = TRUE
+      ),
     ),
     
     mainPanel(

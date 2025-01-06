@@ -92,7 +92,13 @@ search_server <- function(input, output, session) {
   charts <- reactive({
     req(search())
     df <- search()
-    res <- map2(df, names(df), ~ K_chart(.x, .y))
+    res <- map2(df, names(df), ~{
+      .x %>% 
+        candlestick_chart(args = list(ma_lines = input$display_lines)) %>% 
+        add_triangle(tr_date = .y) %>% 
+        add_vol()
+    })
+    
     hidePageSpinner()
     return(res)
   })
@@ -127,7 +133,14 @@ search_server <- function(input, output, session) {
   })
   
   observeEvent(input$random, {
-    rdm <- sample(basic_dat$stock_name, 1)
+    if(is.null(input$market)) {
+      rdm <- sample(basic_dat$stock_name, 1)
+    }else{
+      rdm <- basic_dat %>% 
+        filter(market %in% input$market) %>% 
+        pull(stock_name) %>% 
+        sample(1)
+    }
     
     updateSelectInput(
       session,
