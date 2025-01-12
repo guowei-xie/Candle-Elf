@@ -68,6 +68,14 @@ search_server <- function(input, output, session) {
       )
     }
     
+    if("through_bband_upper" %in% search_func) {
+      tmp <- search_through_bband_upper(tmp)
+    }
+    
+    if("rebound_bband_middle" %in% search_func) {
+      tmp <- search_rebound_bband_middle(tmp)
+    }
+    
     res <- 
       tmp$trade_date %>% 
       head(30) %>% 

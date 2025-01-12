@@ -42,7 +42,9 @@ search_ui <- function(id){
           "涨停首板" = "fst_limt_up",
           "收复均线" = "recover_ma",
           "放量倍增" = "vol_times",
-          "收盘涨幅" = "close_pct_chg"
+          "收盘涨幅" = "close_pct_chg",
+          "突破布林上轨" = "through_bband_upper",
+          "反弹布林中轨" = "rebound_bband_middle"
         ),
         selected = NULL,
         multiple = TRUE

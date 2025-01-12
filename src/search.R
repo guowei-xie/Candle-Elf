@@ -102,18 +102,25 @@ search_close_pct_chg_range <- function(df, upper = NULL, lower = NULL){
 
 # 搜索策略：突破布林带上轨
 search_through_bband_upper <- function(df){
-  df %>%
-    mutate(trade_date = as.Date(trade_date, format = "%Y%m%d")) %>% 
-    arrange(trade_date) %>%
-    mutate(
-      # 计算布林带
-      BB = BBands(HLC = close, n = 20, maType = "SMA", sd = 2),
-      Middle_Band = BB$dn,   # 中轨线
-      Upper_Band = BB$up,    # 上轨线
-      Lower_Band = BB$dn     # 下轨线
-    ) %>% glimpse()
+  df <- filter(df, upper_band >= close)
+  return(df)
 }
 
+
+# 搜索策略：反弹突破布林带中轨
+search_rebound_bband_middle <- function(df){
+  df <- 
+    df %>% 
+    mutate(
+      is_through_middle = open < middle_band & close > middle_band,
+      is_reach_lower = low <= lower_band
+    ) %>% 
+    fitler(is_through_middle || is_reach_lower) %>% 
+    mutate(is_reach_lower_closest = lead(is_reach_lower)) %>% 
+    filter(is_through_middle & is_reach_lower_closest)
+  
+  return(df)
+}
 
 
 # 检索交易日区间
