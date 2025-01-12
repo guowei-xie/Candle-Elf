@@ -1,10 +1,10 @@
 # Initialize all stocks daily data
+message(as.character(Sys.time()), " Table initialization: stock_daily")
 library(config)
 library(duckdb)
 library(Tushare)
 library(plyr)
 
-message(as.character(Sys.time()))
 cnf <- config::get(config = "duckDB")
 
 duck_db <- dbConnect(

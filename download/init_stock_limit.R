@@ -1,10 +1,10 @@
 # Initialize all stocks limit data
+message(as.character(Sys.time()), " Table initialization: stcok_limit")
 library(config)
 library(duckdb)
 library(Tushare)
 library(plyr)
 
-message(as.character(Sys.time()))
 cnf <- config::get(config = "duckDB")
 
 duck_db <- dbConnect(
