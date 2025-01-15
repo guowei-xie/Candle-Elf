@@ -70,12 +70,22 @@ search_server <- function(input, output, session) {
   charts <- reactive({
     req(search())
     dfs <- search()
+    items <- input$display_items
+    
     res <- map2(dfs, names(dfs), ~ {
-      .x %>%
-        candlestick_chart(args = list(ma_lines = input$display_lines)) %>%
-        add_boll_bands() %>%
-        add_triangle(tr_date = .y) %>%
-        add_vol()
+      plt <- .x %>%
+        candlestick_chart(args = list(ma_lines = input$display_lines)) %>% 
+        add_triangle(tr_date = .y) 
+      
+      if("display_bband" %in% items){
+        plt <- add_boll_bands(plt)
+      }
+      
+      if("display_vol" %in% items){
+        plt <- add_vol(plt)
+      }
+      
+      return(plt)
     })
 
     hidePageSpinner()

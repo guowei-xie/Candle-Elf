@@ -116,8 +116,7 @@ search_ui <- function(id){
             inputId = ns("random"),
             label = "换股",
             width = "100%",
-            icon = icon("random"),
-            style = "background-color: #d3d3d3; color: #000;"
+            icon = icon("random")
           )
         ),
         column(
@@ -131,10 +130,9 @@ search_ui <- function(id){
         )
       ),
       
-      br(),
       hr(),
       tags$small("自定义选项"),
-      
+      br(),
       selectInput(
         inputId = ns("market"),
         label = tags$small("随机范围"),
@@ -156,6 +154,15 @@ search_ui <- function(id){
         selected = c("ma_5", "ma_10", "ma_20"),
         multiple = TRUE
       ),
+      
+      checkboxGroupInput(
+        inputId = ns("display_items"), 
+        label = tags$small("辅助图显示"), 
+        choices = list(
+          "布林带" = "display_bband",
+          "成交量" = "display_vol"
+        ),
+        selected = "display_bband")
     ),
     
     mainPanel(

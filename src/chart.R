@@ -148,7 +148,8 @@ add_triangle <- function(kplt, tr_date, col = "salmon"){
       shape = 25,
       size = 3,
       color = col
-    ) 
+    ) +
+    labs(subtitle = paste0("标记交易日：", tr_date))
 }
 
 
