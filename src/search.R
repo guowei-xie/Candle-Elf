@@ -102,7 +102,8 @@ search_close_pct_chg_range <- function(df, upper = NULL, lower = NULL){
 
 # 搜索策略：突破布林带上轨
 search_through_bband_upper <- function(df){
-  df <- filter(df, upper_band >= close)
+  df <- df %>% 
+    filter(open < upper_band & close > upper_band)
   return(df)
 }
 
@@ -112,11 +113,11 @@ search_rebound_bband_middle <- function(df){
   df <- 
     df %>% 
     mutate(
-      is_through_middle = open < middle_band & close > middle_band,
+      is_through_middle = pre_close < middle_band & close > middle_band,
       is_reach_lower = low <= lower_band
     ) %>% 
-    fitler(is_through_middle || is_reach_lower) %>% 
-    mutate(is_reach_lower_closest = lead(is_reach_lower)) %>% 
+    filter(is_through_middle | is_reach_lower) %>% 
+    mutate(is_reach_lower_closest = lag(is_reach_lower)) %>% 
     filter(is_through_middle & is_reach_lower_closest)
   
   return(df)
