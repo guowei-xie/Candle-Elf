@@ -17,7 +17,7 @@ source("ui/search_ui.R")
 source("module/search_server.R")
 
 ui <- fluidPage(
-  theme = shinytheme("cosmo"),
+  theme = shinytheme(cnf$theme),
   
   navbarPage(
     title = cnf$title,
