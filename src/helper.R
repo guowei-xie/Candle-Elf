@@ -1,6 +1,7 @@
 # Moving Average
 add_ma_price <- function(df){
   df %>% 
+    arrange(desc(trade_date)) %>% 
     mutate(
       ma_5 = rollapply(close, width = 5, FUN = mean, align = "left", fill = NA),
       ma_10 = rollapply(close, width = 10, FUN = mean, align = "left", fill = NA),

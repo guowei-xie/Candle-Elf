@@ -11,26 +11,13 @@ search_ui <- function(id){
         selected = NULL
       ),
       dateInput(
-        inputId = ns("start_date"),
+        inputId = ns("scope_start_date"),
         label = "搜索范围（开始）",
         value = Sys.Date() - 730
       ),
       dateInput(
-        inputId = ns("end_date"),
+        inputId = ns("scope_end_date"),
         label = "搜索范围（结束）:"
-      ),
-      
-      numericInput(
-        inputId = ns("period_start"),
-        label = "向前显示N日",
-        value = 30,
-        min = 0
-      ),
-      numericInput(
-        inputId = ns("period_end"),
-        label = "向后显示N日",
-        value = 30,
-        min = 0
       ),
       
       hr(),
@@ -39,12 +26,12 @@ search_ui <- function(id){
         inputId = ns("search_func"),
         label = "搜索形态条件",
         choices = list(
-          "涨停首板" = "fst_limt_up",
-          "收复均线" = "recover_ma",
-          "放量倍增" = "vol_times",
-          "收盘涨幅" = "close_pct_chg",
-          "突破布林上轨" = "through_bband_upper",
-          "反弹布林中轨" = "rebound_bband_middle"
+          "涨停首板" = "search_up_limit",
+          "收复均线" = "search_recover_ma",
+          "放量倍增" = "search_vol_times",
+          "收盘涨幅" = "search_close_pct_chg_range",
+          "突破布林上轨" = "search_through_bband_upper",
+          "反弹布林中轨" = "search_rebound_bband_middle"
         ),
         selected = NULL,
         multiple = TRUE
@@ -52,9 +39,9 @@ search_ui <- function(id){
       
       # 涨停首板条件
       conditionalPanel(
-        condition = sprintf("input['%s'].includes('fst_limt_up')", ns("search_func")),
+        condition = sprintf("input['%s'].includes('search_up_limit')", ns("search_func")),
         numericInput(
-          inputId = ns("fst_limt_up_interval"),
+          inputId = ns("up_limit_interval"),
           label = tags$small("涨停首板条件：N个交易日内首板"),
           value = 5,
           min = 1
@@ -63,7 +50,7 @@ search_ui <- function(id){
       
       # 收复均线条件
       conditionalPanel(
-        condition = sprintf("input['%s'].includes('recover_ma')", ns("search_func")),
+        condition = sprintf("input['%s'].includes('search_recover_ma')", ns("search_func")),
         numericInput(
           inputId = ns("recover_ma_nums"),
           label = tags$small("收复均线条件：收复均线数量(可选)"),
@@ -87,7 +74,7 @@ search_ui <- function(id){
       
       # 放量倍增选项
       conditionalPanel(
-        condition = sprintf("input['%s'].includes('vol_times')", ns("search_func")),
+        condition = sprintf("input['%s'].includes('search_vol_times')", ns("search_func")),
         numericInput(
           inputId = ns("vol_times_rct_days"),
           label = tags$small("放量倍增条件：与近N日平均交易量比较"),
@@ -105,7 +92,7 @@ search_ui <- function(id){
       
       # 涨跌幅选项
       conditionalPanel(
-        condition = sprintf("input['%s'].includes('close_pct_chg')", ns("search_func")),
+        condition = sprintf("input['%s'].includes('search_close_pct_chg_range')", ns("search_func")),
         numericInput(
           inputId = ns("close_pct_chg_upper"),
           label = tags$small("收盘涨幅条件：区间上限(%)"),
