@@ -19,6 +19,11 @@ source("module/search_server.R")
 ui <- fluidPage(
   theme = shinytheme(cnf$theme),
   
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
+    tags$script(src = "scripts.js")
+  ),
+  
   navbarPage(
     title = cnf$title,
     
