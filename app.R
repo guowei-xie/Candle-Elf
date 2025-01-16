@@ -27,9 +27,8 @@ ui <- fluidPage(
   navbarPage(
     title = cnf$title,
     
-    tabPanel("搜索 >>", search_ui("search"))
-    # tabPanel("回测 >>", backtest_ui("backtest")),
-    # tabPanel("练习 ", practice_ui("practice"))
+    tabPanel("搜索 >>", search_ui("search")),
+    tabPanel("练习 ", practice_ui("practice"))
   )
 )
 

@@ -13,7 +13,7 @@ duck_db <- dbConnect(
   read_only = FALSE
 )
 
-token <- config::get(config = "tushare")$token
+token <- Sys.getenv("tushare_token")
 api <- Tushare::pro_api(token = token)
 stock_basic <- api(api_name = "stock_basic")
 stock_nums <- nrow(stock_basic)

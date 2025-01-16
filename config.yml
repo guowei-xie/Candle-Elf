@@ -1,0 +1,9 @@
+default:
+  title: Candle Elf
+  theme: flatly
+  display_charts: 30
+  display_days: 30
+  
+duckDB:
+  path: /database
+  name: stock.duckdb
