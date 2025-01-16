@@ -9,11 +9,13 @@ library(zoo)
 library(patchwork)
 library(TTR)
 library(rlang)
+library(plotly)
 source("src/search.R")
 source("src/chart.R")
 source("src/helper.R")
 source("src/global.R")
 source("ui/search_ui.R")
+source("ui/practice_ui.R")
 source("module/search_server.R")
 
 ui <- fluidPage(

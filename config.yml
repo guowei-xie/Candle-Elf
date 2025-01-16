@@ -5,5 +5,5 @@ default:
   display_days: 30
   
 duckDB:
-  path: /database
+  path: ./database
   name: stock.duckdb
