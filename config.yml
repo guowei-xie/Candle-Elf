@@ -4,6 +4,6 @@ default:
   display_charts: 30
   display_days: 30
   
-duckDB:
-  path: ./database
-  name: stock.duckdb
+sqlite:
+  path: ./db
+  name: stock.sqlite

@@ -4,7 +4,7 @@ library(RSQLite)
 library(Tushare)
 library(plyr)
 
-tbl_name <- "stock_daily"
+tbl_name <- "stock_basic"
 message(as.character(Sys.time()), " Table initialization: ", tbl_name)
 
 cnf <- config::get(config = "sqlite")
@@ -26,41 +26,19 @@ token <- Sys.getenv("tushare_token")
 if(token == ""){
   stop("Please configure environment variables tushare_token first. If you have any questions, please refer to Readme")
 }
+  
 
 api <- Tushare::pro_api(token = token)
 stock_basic <- api(api_name = "stock_basic")
-stock_nums <- nrow(stock_basic)
-cache_N <- 0
-cache_df <- data.frame()
 
-progress.bar <- plyr::create_progress_bar("text")
-progress.bar$init(stock_nums)
-for(i in 1:stock_nums) {
-  scd <- stock_basic$ts_code[[i]]
-  sdf <- try({api(api_name = "daily", ts_code = scd)}, silent = TRUE)
-  
-  if (!inherits(sdf, "try-error")) {
-    cache_df <- rbind(cache_df, sdf)
-  }else{
-    message("\nCatch error:", scd)
-  }
-  
-  cache_N <- cache_N + 1
-  
-  if(cache_N %% 500 == 0 | i == stock_nums){
-    dbWriteTable(
-      db, 
-      tbl_name,
-      cache_df, 
-      row.names = FALSE, 
-      append = TRUE
-    )
-    
-    cache_df <- data.frame()
-    message("\nCache data to database, current: ", i)
-  }
-  
-  progress.bar$step()
+if(nrow(stock_basic)){
+  dbWriteTable(
+    db, 
+    tbl_name,
+    stock_basic, 
+    row.names = FALSE, 
+    overwrite = TRUE
+  )
 }
 
 DBI::dbDisconnect(db)

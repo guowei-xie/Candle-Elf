@@ -1,20 +1,23 @@
 # Update stock data everyday
 library(tidyverse)
 library(config)
-library(duckdb)
+library(RSQLite)
 library(Tushare)
 
 message(as.character(Sys.time()))
 
-cnf <- config::get(config = "duckDB")
+cnf <- config::get(config = "sqlite")
 
-duck_db <- dbConnect(
-  duckdb(),
-  dbdir = paste0(cnf$path, "/", cnf$name),
-  read_only = FALSE
+db <- dbConnect(
+  RSQLite::SQLite(),
+  paste0(cnf$path, "/", cnf$name)
 )
 
 token <- Sys.getenv("tushare_token")
+if(token == ""){
+  stop("Please configure environment variables tushare_token first. If you have any questions, please refer to Readme")
+}
+
 api <- Tushare::pro_api(token = token)
 
 trade_calendar <- 
@@ -24,7 +27,7 @@ trade_calendar <-
 today_date <- format(Sys.Date(), "%Y%m%d")
 
 last_trade_date <- dbGetQuery(
-  duck_db, 
+  db, 
   "select max(trade_date) as date from stock_daily"
 ) %>% 
   pull(date)
@@ -39,7 +42,7 @@ message("Update stock basic data to database...")
 stock_basic <- api(api_name = "stock_basic")
 if(nrow(stock_basic)){
   dbWriteTable(
-    duck_db, 
+    db, 
     "stock_basic",
     stock_basic, 
     row.names = FALSE, 
@@ -61,7 +64,7 @@ update_daily_date <- function(tbl_name, api_name, dates){
     
     if (!inherits(daily_df, "try-error")) {
       dbWriteTable(
-        duck_db, 
+        db, 
         tbl_name,
         daily_df, 
         row.names = FALSE, 
@@ -82,5 +85,5 @@ update_daily_date("stock_daily", "daily", update_trade_dates)
 # Update stock limit data to database 
 update_daily_date("stock_limit", "stk_limit", update_trade_dates)
 
-DBI::dbDisconnect(duck_db, shutdown = TRUE)
+DBI::dbDisconnect(db)
 

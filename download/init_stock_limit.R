@@ -1,19 +1,32 @@
 # Initialize all stocks limit data
-message(as.character(Sys.time()), " Table initialization: stcok_limit")
 library(config)
-library(duckdb)
+library(RSQLite)
 library(Tushare)
 library(plyr)
 
-cnf <- config::get(config = "duckDB")
+tbl_name <- "stock_limit"
+message(as.character(Sys.time()), " Table initialization: ", tbl_name)
 
-duck_db <- dbConnect(
-  duckdb(),
-  dbdir = paste0(cnf$path, "/", cnf$name),
-  read_only = FALSE
+cnf <- config::get(config = "sqlite")
+
+db <- dbConnect(
+  RSQLite::SQLite(),
+  paste0(cnf$path, "/", cnf$name)
 )
 
+get_tbls <- dbGetQuery(db, "SELECT name FROM sqlite_master WHERE type='table'")
+
+if(tbl_name %in% get_tbls$name){
+  rows <- dbExecute(db, paste("DELETE FROM", tbl_name))
+  message("Deleted ", rows, " rows from ", tbl_name)
+}
+
 token <- Sys.getenv("tushare_token")
+
+if(token == ""){
+  stop("Please configure environment variables tushare_token first. If you have any questions, please refer to Readme")
+}
+
 api <- Tushare::pro_api(token = token)
 stock_basic <- api(api_name = "stock_basic")
 stock_nums <- nrow(stock_basic)
@@ -36,8 +49,8 @@ for(i in 1:stock_nums) {
   
   if(cache_N %% 500 == 0 | i == stock_nums){
     dbWriteTable(
-      duck_db, 
-      "stock_limit",
+      db, 
+      tbl_name,
       cache_df, 
       row.names = FALSE, 
       append = TRUE
@@ -51,4 +64,4 @@ for(i in 1:stock_nums) {
   progress.bar$step()
 }
 
-DBI::dbDisconnect(duck_db, shutdown = TRUE)
+DBI::dbDisconnect(db)
