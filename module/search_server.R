@@ -4,10 +4,10 @@ search_server <- function(input, output, session) {
   dat <- reactive({
     req(input$stock)
     code <- sub(".*\\((.*?)\\).*", "\\1", input$stock)
-
-    daily <- filter(daily_dat, ts_code == code)
-    limit <- filter(limit_dat, ts_code == code)
-    basic <- filter(basic_dat, ts_code == code)
+    
+    daily <- try_api(api, api_name = "daily", ts_code = code)
+    limit <- try_api(api, api_name = "stk_limit", ts_code = code)
+    basic <- filter(stock_basic, ts_code == code)
 
     df <- daily %>%
       left_join(limit, by = c("ts_code", "trade_date")) %>%
@@ -124,9 +124,9 @@ search_server <- function(input, output, session) {
 
   observeEvent(input$random, {
     if (is.null(input$market)) {
-      rdm <- sample(basic_dat$stock_name, 1)
+      rdm <- sample(stock_basic$stock_name, 1)
     } else {
-      rdm <- basic_dat %>%
+      rdm <- stock_basic %>%
         filter(market %in% input$market) %>%
         pull(stock_name) %>%
         sample(1)

@@ -1,3 +1,17 @@
+# Safe api request
+try_api <- function(func, ...){
+  res <- tryCatch(
+    {
+      func(...)
+    },
+    error = function(e) {
+      message(paste("An error occurred:", e$message))
+      return(data.frame())
+    })
+  
+  return(res)
+}
+
 # Moving Average
 add_ma_price <- function(df){
   df %>% 

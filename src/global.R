@@ -1,19 +1,17 @@
-cnf <- config::get(config = "sqlite")
+# Read configuration
+cnf <- config::get()
 
-db <- dbConnect(
-  RSQLite::SQLite(),
-  paste0(cnf$path, "/", cnf$name)
-)
+# Request stock base data
+api <- Tushare::pro_api(token = Sys.getenv("tushare_token"))
 
-basic_dat <- dbGetQuery(db, "select * from stock_basic") %>%
+stock_basic <- 
+  try_api(api, api_name = "stock_basic") %>% 
   mutate(stock_name = paste0(name, "(", ts_code, ")"))
 
-daily_dat <- dbGetQuery(db, "select * from stock_daily")
-
-limit_dat <- dbGetQuery(db, "select * from stock_limit")
-
+# Set chart theme
 theme_set(theme_ipsum(base_family = "Kai", base_size = 8))
 
+# Color mapping
 dir_mp <- c(
   "up" = "#f03b20",
   "down" = "#31a354"

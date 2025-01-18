@@ -7,7 +7,7 @@ search_ui <- function(id){
       selectInput(
         inputId = ns("stock"),
         label = "搜索个股",
-        choices = basic_dat$stock_name,
+        choices = stock_basic$stock_name,
         selected = NULL
       ),
       dateInput(

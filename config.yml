@@ -1,9 +1,5 @@
 default:
   title: Candle Elf
   theme: flatly
-  display_charts: 30
+  display_charts: 15
   display_days: 30
-  
-sqlite:
-  path: ./db
-  name: stock.sqlite
