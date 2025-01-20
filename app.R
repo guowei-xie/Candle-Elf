@@ -10,6 +10,7 @@ library(patchwork)
 library(TTR)
 library(rlang)
 library(plotly)
+library(lubridate)
 source("src/search.R")
 source("src/chart.R")
 source("src/helper.R")
@@ -17,6 +18,7 @@ source("src/global.R")
 source("ui/search_ui.R")
 source("ui/practice_ui.R")
 source("module/search_server.R")
+source("module/practice_server.R")
 
 ui <- fluidPage(
   theme = shinytheme(cnf$theme),
@@ -36,6 +38,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   callModule(search_server, "search")
+  callModule(practice_server, "practice")
 }
 
 shinyApp(ui, server)

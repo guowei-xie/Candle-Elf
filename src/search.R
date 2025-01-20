@@ -18,6 +18,22 @@ search_trade_period <- function(trdate, daily, bfr_days = 0, aft_days = 0) {
   return(res)
 }
 
+# 搜索策略：随机交易日
+search_random_trade_date <- function(df){
+  trade_dates <- df %>% 
+    arrange(desc(trade_date)) %>% 
+    mutate(index = 1:n()) %>% 
+    filter(index > cnf$practice_days & index < cnf$history_days) %>% 
+    pull(trade_date) 
+  
+  if(length(trade_dates)) {
+    res <- sample(trade_dates, 1)
+  }else{
+    res <- NULL
+  }
+  return(res)
+}
+
 
 # 搜索策略：涨停
 search_up_limit <- function(df, args) {
@@ -162,3 +178,4 @@ search_rebound_bband_middle <- function(df, ...){
   
   return(res)
 }
+
