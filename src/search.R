@@ -1,6 +1,9 @@
 # 检索交易日区间
 search_trade_period <- function(trdate, daily, bfr_days = 0, aft_days = 0) {
-  daily$idx <- 1:nrow(daily)
+  daily <- daily %>% 
+    arrange(desc(trade_date)) %>% 
+    mutate(idx = 1:n())
+  
   idx <- daily[daily$trade_date == trdate, "idx"]
   
   if (!length(idx)) {

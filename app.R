@@ -31,7 +31,7 @@ ui <- fluidPage(
   navbarPage(
     title = cnf$title,
     
-    tabPanel("搜索 >>", search_ui("search")),
+    tabPanel("发现 >>", search_ui("search")),
     tabPanel("练习 ", practice_ui("practice"))
   )
 )

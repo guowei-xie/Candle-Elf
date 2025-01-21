@@ -38,7 +38,8 @@ practice_ui <- function(id){
         
       ),
       
-      plotlyOutput(ns("practice_chart"))
+      # plotlyOutput(ns("practice_chart"))
+      plotOutput(ns("practice_chart"))
     ),
     
     sidebarPanel(
@@ -47,6 +48,12 @@ practice_ui <- function(id){
         label = "换一个",
         width = "100%",
         icon = icon("random")
+      ),
+      actionButton(
+        inputId = ns("next_step"),
+        label = "继续",
+        width = "100%",
+        icon = icon("")
       )
     )
   )
