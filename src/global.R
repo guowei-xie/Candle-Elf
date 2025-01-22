@@ -8,9 +8,6 @@ stock_basic <-
   try_api(api, api_name = "stock_basic") %>% 
   mutate(stock_name = paste0(name, "(", ts_code, ")"))
 
-# Set chart theme
-theme_set(theme_ipsum(base_family = "Kai", base_size = 8))
-
 # Color mapping
 dir_mp <- c(
   "up" = "#f03b20",

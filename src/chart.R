@@ -91,11 +91,15 @@ candlestick_chart <- function(df, status = "close", args = list()){
     scale_fill_manual(values = c(dir_mp)) +
     theme(
       axis.text.x = element_blank(),
+      axis.text.y = element_text(size = 10, color = "black"),
+      axis.ticks.y = element_line(color = "black"),
       panel.grid.minor = element_blank(),
       panel.grid.major = element_blank(),
-      legend.position = "none"
+      legend.position = "none",
+      panel.border = element_rect(color = "black", size = 0.8, fill = NA)
     ) +
     labs(x = "", y = "", title = ttl)
+    
   
   ma_lines <- pluck(args, "ma_lines")
 

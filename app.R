@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyjs)
 library(shinythemes)
 library(shinycssloaders)
 library(config)
@@ -15,6 +16,7 @@ source("src/search.R")
 source("src/chart.R")
 source("src/helper.R")
 source("src/global.R")
+source("src/trade.R")
 source("ui/search_ui.R")
 source("ui/practice_ui.R")
 source("module/search_server.R")
@@ -22,7 +24,7 @@ source("module/practice_server.R")
 
 ui <- fluidPage(
   theme = shinytheme(cnf$theme),
-  
+  useShinyjs(), 
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
     tags$script(src = "scripts.js")

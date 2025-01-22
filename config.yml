@@ -1,6 +1,6 @@
 default:
   title: Candle Elf
-  theme:  flatly
+  theme:  yeti
   display_charts: 15 # 搜索结果的图表数量
   display_days: 30 # 搜索结果的前后交易日数量
   history_days: 90 # 练习图表的过往交易日数量
