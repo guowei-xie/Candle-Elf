@@ -5,3 +5,5 @@ default:
   display_days: 30 # 搜索结果的前后交易日数量
   history_days: 90 # 练习图表的过往交易日数量
   practice_days: 60 # 练习图表的未来交易日数量
+  attempt_times: 10 # 搜索重试次数限制
+  init_account: 100000 # 默认账户初始资金

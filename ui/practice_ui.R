@@ -45,6 +45,12 @@ practice_ui <- function(id){
             )
           ),
         ),
+        actionButton(
+          inputId = ns("change"),
+          label = "重新搜索",
+          width = "100%",
+          icon = icon("random")
+        ),
         hr()
       )),
       br(),
@@ -52,30 +58,62 @@ practice_ui <- function(id){
     ),
     
     sidebarPanel(
-      actionButton(
-        inputId = ns("change"),
-        label = "换一个",
-        width = "100%",
-        icon = icon("random")
+      fluidRow(
+        column(
+          width = 4,
+          uiOutput(ns("account"))
+        ),
+        column(
+          width = 4,
+          uiOutput(ns("hold_value"))
+        ),
+        column(
+          width = 4,
+          uiOutput(ns("cum_rate"))
+        )
       ),
-      actionButton(
-        inputId = ns("next_step"),
-        label = "继续",
-        width = "100%",
-        icon = icon("")
+      br(),
+      hr(),
+      
+      fluidRow(
+        style = "display: flex; align-items: center;",
+        column(
+          width = 4,
+          actionButton(
+            inputId = ns("next_step"),
+            label = "观望",
+            width = "100%",
+            icon = icon("")
+          )
+        ),
+        
+        column(
+          width = 5,
+          actionButton(
+            inputId = ns("trade"),
+            label = "交易",
+            width = "100%",
+            icon = icon("")
+          ),
+        ),
+        
+        column(
+          width = 3,
+          div(
+            style = "margin-top: -10px;",  # 向上调整一个像素
+            numericInput(
+              inputId = ns("price"),
+              label = tags$small("价格"),
+              value = 12,
+              min = 12,
+              max = 12
+            )
+          )
+        )
       ),
-      actionButton(
-        inputId = ns("trade"),
-        label = "交易",
-        width = "100%",
-        icon = icon("")
-      ),
-      numericInput(
-        inputId = ns("price"),
-        label = tags$small("价格"),
-        value = NULL,
-        min = 0
-      )
+      
+      
+      
     )
   )
 }
