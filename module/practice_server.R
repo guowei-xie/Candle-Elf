@@ -23,13 +23,18 @@ practice_server <- function(input, output, session) {
     }
   })
   
-  # 重置步数与开盘状态
-  observeEvent(c(input$change, next_stock()), {
+  # # 重置步数与开盘状态
+  # observeEvent(c(input$change, next_stock()), {
+  #   steps(0)
+  #   open_status("open")
+  # })
+  
+  # 继续训练并重置状态
+  observeEvent(next_stock(), {
     steps(0)
     open_status("open")
   })
   
-
   # 完整练习数据
   practice_dat <- eventReactive(c(input$change, next_stock()), {
     code <- sample(stock_basic$ts_code, 1)
@@ -236,7 +241,7 @@ practice_server <- function(input, output, session) {
     )
   })
   
-  # 按钮状态控制
+  # 按钮状态标签渲染
   observe({
     if(hold_lots() == 0){
       next_step_label <- "空仓观望"
@@ -259,6 +264,44 @@ practice_server <- function(input, output, session) {
   })
   
   
+  # 练习结束事件
+  observe({
+    curr_date <- head(practice_chart_dat(), 1)$trade_date
+    end_date <- head(practice_dat(), 1)$trade_date
+    if(curr_date == end_date & open_status() == "close") {
+      # 结束弹窗
+      showModal(modalDialog(
+        title = "这是一个弹窗",
+        "这是弹窗中的文字内容。",
+        footer = tagList(
+          actionButton(ns("modal_continue"), "继续训练"),
+          actionButton(ns("modal_close"), "关闭"),
+        ),
+        size = "l"
+      ))
+      
+      # 操作按钮替换
+      toggle("next_step")
+      toggle("trade")
+      toggle("price")
+      toggle("continue")
+    }
+  })
+  
+  # 关闭弹窗
+  observeEvent(input$modal_close, {
+    removeModal()
+  })
+  
+  # 继续训练
+  observeEvent(input$modal_continue, {
+    removeModal()
+    toggle("next_step")
+    toggle("trade")
+    toggle("price")
+    toggle("continue")
+    next_stock(next_stock() + 1)
+  })
   
   observe({
     message("----------")
@@ -270,7 +313,6 @@ practice_server <- function(input, output, session) {
     print(account())
     message("持仓价值：")
     print(hold_value())
-    
   })
   
   
